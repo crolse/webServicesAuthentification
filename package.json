@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "swagger-autogen": "node swagger.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +18,8 @@
     "mysql2": "^2.2.5",
     "password-hash": "^1.2.2",
     "randomstring": "^1.1.5",
-    "sequelize": "^6.5.0"
+    "sequelize": "^6.5.0",
+    "swagger-autogen": "^2.6.3",
+    "swagger-ui-express": "^4.1.4"
   }
 }

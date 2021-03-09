@@ -8,7 +8,7 @@ const connectionBdd = () => {
 
         dbMysql.dbMysql.connect()
 
-        console.log('Connecté à la base de données MySQL de type sql!');
+        console.log('Connecté à la base de données MySQL !');
     } catch (error) {
 
         console.error('Impossible de se connecter, erreur suivante :', error);

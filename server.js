@@ -1,15 +1,19 @@
 const express = require("express");
+const http = require('http')
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dbMysql = require("./app/config/mysql.config.js")
 const connectionBdd = require("./app/services/ConnectionBdd")
 var passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
-var randomstring = require("randomstring");
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
 
 
 const app = express();
-
+http.createServer(app).listen(8080)
+console.log("Listening at:// port:%s (HTTP)", 8080)
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 
 // init connection to bdd
@@ -19,10 +23,10 @@ connectionBdd.connectionBdd()
 
 app.use(cors())
 
-// parse requests of content-type - application/json
+
 app.use(bodyParser.json());
 
-// parse requests of content-type - application/x-www-form-urlencoded
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -34,21 +38,24 @@ app.post("/user", (req, res) => {
     try {
         req.body.password = passwordHash.generate(req.body.password);
         dbMysql.dbMysql.query("SELECT * FROM user WHERE pseudo=? OR mail=?", [req.body.pseudo, req.body.mail], function (err, result) {
-            if (err) throw err;
+            if (err) res.status(500).json({ message: "unknown error" });
             console.log("retour du select" + result);
             if (result == "") {
                 dbMysql.dbMysql.query('INSERT INTO user SET mail = ? , pseudo = ? , password = ? , isAdmin = ?', [req.body.mail, req.body.pseudo, req.body.password, req.body.isAdmin], function (error, results, fields) {
-                    if (error) throw error;
-                    res.end("OK");
+                    if (error) res.status(500).json({ message: "unknown error" });
+                    res.status(500).json({ message: "utilisateur ajouté" });;
                 });
             }
             else {
                 console.log("email ou pseudo déja utilisé");
-                res.end("NOK")
+                res.status(406).json({ message: "email ou pseudo déja utilisé" }) // 406 NOT ACCEPTABLE
 
             }
         });
-    } catch (error) { res.end("NOK") }
+    } catch (error) {
+        res.status(500).json({ message: "unknown error" })
+
+    }
 
 
 });
@@ -59,8 +66,8 @@ app.post("/user", (req, res) => {
 app.post("/connection", (req, res) => {
     try {
         dbMysql.dbMysql.query("SELECT password, id ,isAdmin FROM user where mail = ?", [req.body.mail], function (err, result) {
-            if (err) throw err;
-            if (result == "") { res.end("NOK") }
+            if (err) res.status(500).json({ message: "unknown error" });
+            if (result == "") { res.status(406).json({ message: "email invalide" }) }
             else {
                 console.log(result[0].password);
                 console.log(result[0].id)
@@ -78,21 +85,15 @@ app.post("/connection", (req, res) => {
                     });
                 }
                 else {
-                    console.log("email ou mot de passe erroné")
-                    res.end("NOK")
+                    console.log("mot de passe erroné")
+                    res.status(406).json({ message: "mot de passe invalide" })
                 }
             }
         });
 
-    } catch (error) { res.end("NOK") }
+    } catch (error) { res.status(500).json({ message: "unknown error" }) }
 });
 //#endregion
 
 
 
-// set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-
-});
