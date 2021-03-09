@@ -58,7 +58,7 @@ app.post("/user", (req, res) => {
 //#region SignIN
 app.post("/connection", (req, res) => {
     try {
-        dbMysql.dbMysql.query("SELECT password, id FROM user where mail = ?", [req.body.mail], function (err, result) {
+        dbMysql.dbMysql.query("SELECT password, id ,isAdmin FROM user where mail = ?", [req.body.mail], function (err, result) {
             if (err) throw err;
             if (result == "") { res.end("NOK") }
             else {
@@ -73,7 +73,8 @@ app.post("/connection", (req, res) => {
                             { userId: result[0].id },
                             'ULTRA_RANDOM_TOKEN_SECRET',
                             { expiresIn: '4h' }
-                        )
+                        ),
+                        isAdmin: result[0].isAdmin
                     });
                 }
                 else {
