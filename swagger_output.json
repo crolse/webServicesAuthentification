@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
+    "title": "API SignIn/SignUp",
     "description": ""
   },
   "host": "localhost:8080",
@@ -11,13 +11,17 @@
   "schemes": [
     "http"
   ],
-  "consumes": [],
-  "produces": [],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/user": {
       "post": {
         "tags": [],
-        "description": "",
+        "description": "Permet à un utilisateur de s'inscrire",
         "parameters": [
           {
             "name": "obj",
@@ -27,19 +31,20 @@
               "properties": {
                 "password": {
                   "type": "string",
-                  "example": "any"
+                  "example": "123"
                 },
                 "pseudo": {
                   "type": "string",
-                  "example": "any"
+                  "example": "thomas"
                 },
                 "mail": {
                   "type": "string",
-                  "example": "any"
+                  "example": "thomas@gmail.com"
                 },
                 "isAdmin": {
-                  "type": "string",
-                  "example": "any"
+                  "type": "int",
+                  "example": "0",
+                  "description": "Valeur 0 -> compte utilisateur / Valeur 1 -> compte admin"
                 }
               }
             }
@@ -58,7 +63,7 @@
     "/connection": {
       "post": {
         "tags": [],
-        "description": "",
+        "description": "Permet de verifier que l'utilisateur existe",
         "parameters": [
           {
             "name": "obj",
@@ -68,11 +73,11 @@
               "properties": {
                 "mail": {
                   "type": "string",
-                  "example": "any"
+                  "example": "thomas@gmail.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "any"
+                  "example": "123"
                 }
               }
             }
