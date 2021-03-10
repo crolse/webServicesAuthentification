@@ -42,8 +42,8 @@
                   "example": "thomas@gmail.com"
                 },
                 "isAdmin": {
-                  "type": "int",
-                  "example": "0",
+                  "type": "integer",
+                  "example": 0,
                   "description": "Valeur 0 -> compte utilisateur / Valeur 1 -> compte admin"
                 }
               }
