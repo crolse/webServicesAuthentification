@@ -43,7 +43,7 @@ app.post("/user", (req, res) => {
             if (result == "") {
                 dbMysql.dbMysql.query('INSERT INTO user SET mail = ? , pseudo = ? , password = ? , isAdmin = ?', [req.body.mail, req.body.pseudo, req.body.password, req.body.isAdmin], function (error, results, fields) {
                     if (error) res.status(500).json({ message: "unknown error" });
-                    res.status(500).json({ message: "utilisateur ajouté" });;
+                    res.status(200).json({ message: "utilisateur ajouté" });;
                 });
             }
             else {
